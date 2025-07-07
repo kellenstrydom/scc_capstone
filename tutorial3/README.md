@@ -223,7 +223,7 @@ A library is a collection of pre-compiled code that provides functionality to ot
 
   Static libraries are embedded into the binary that you create when you compile your software. In essence, it copies the library that exists on your computer into the executable that gets created at **compilation time**. This means that the resulting program binary is self-contained and can operate on multiple systems without them needing the libraries installed first. Static libraries are normally files that end with the `.a` extension, for "archive".
 
-  Advantages here are that the program can potentially be faster, as it has direct access to the required libraries without having to query the operating system first, but disadavanges include the file size being larger and updating the library requires recompiling (and linking the updated library) the software.
+  Advantages here are that the program can potentially be faster, as it has direct access to the required libraries without having to query the operating system first, but disadvantages include the file size being larger and updating the library requires recompiling (and linking the updated library) the software.
 
 * Dynamic Libraries
 

@@ -231,6 +231,8 @@ You will now be creating a new private Virtual Local Area Network (VLAN). Only y
 
    <p align="center"><img alt="OpenStack Create New Private Network." src="./resources/openstack_create_private_network_04.png" width=600 /></p>
 
+1. Click on your newly created VLAN, navigate to `Ports` and create a port on your VLAN that will allow you to transmit traffic between your VLAN and the public internet.
+
 ## Create a New Router
 
 You will now create a new `router`, to route traffic between your `vlan` that you created in the previous step and your public facing interface, which wil give you cluster access to the internet.
