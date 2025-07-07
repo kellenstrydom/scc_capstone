@@ -253,7 +253,7 @@ You will now create a new `security group`, to control and restrict traffic betw
 
 1. You will now be allowing **"inbound"** SSH connections from the internet by opening TCP Port 22. Start by clicking on `Add Rule`. Enter a sensible description and the SSH port number.
 
-   <p align="center"><img alt="OpenStack Create New Private Network." src="./resources/openstack_create_private_router_02.png" width=600 /></p>
+   <p align="center"><img alt="OpenStack Create New Private Network." src="./resources/openstack_create_private_sg_02.png" width=600 /></p>
 
 1. Your security groups can be modified at any time, event after creation of an instance. Any time you are required to open a firewall port, remember to also open the corresponding port within your OpenStack workspace security group.
 
@@ -301,7 +301,7 @@ You and your Team, together with input and advise from your mentors, must do som
 The following list provides a few examples of Linux distros that *may* be available on the Sebowa OpenStack cloud for you to use, and that you *might* consider using as a *'daily driver'*.
 
 > [!TIP]
-> You do not need to decide right now which Linux Flavor you and your team will be installing on you personal / school laptop and desktop computers. The list and corresponding links are provided for later reference, however for the time being you are strongly encouraged to proceed with **Rocky 9.3 image**. If you are already using or familiar with Linux, discuss this with the instructors who will advise you on how to proceed.
+> You do not need to decide right now which Linux Flavor you and your team will be installing on you personal / school laptop and desktop computers. The list and corresponding links are provided for later reference, Rocky or Ubuntu make excellent choices for a distro. If you are already using or familiar with Linux, discuss this with the instructors who will advise you on how to proceed, i.e. if you are familiar with Arch linux, for example, you are more than welcome to complete using the tutorials using Arch, and it is *"fully-ish"*, tested and *supported* within the tutorials.
 
 * **RPM** or Red Hat Package Manager is a free and open-source package management system. The name RPM refers to the `.rpm` file format and the package manager program itself. Examples include [Red Hat Enterprise Linux](https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux), [Rocky Linux](https://rockylinux.org/), [Alma Linux](https://almalinux.org/), [CentOS Stream](https://www.centos.org/centos-stream/) and [Fedora](https://fedoraproject.org/). You can't go wrong with choose of either Red Hat, Alma, ***Rocky*** or CentoS Stream for the competition. You manage packages through tools such at `yum` (Yellowdog Updater, Modified) and / or `dnf` (Dandified YUM).
 
@@ -407,7 +407,7 @@ In order for you to be able to SSH into your newly created OpenStack instance, y
    <p align="center"><img alt="OpenStack Running State." src="./resources/openstack_associate_floating_ip.png" width=900 /></p>
 1. From the *Manage Floating IP Associations* dialog box, click the "➕" and select *Public Internet*:
    <p align="center"><img alt="OpenStack Running State." src="./resources/openstack_public_net.png" width=900 /></p>
-1. Select the `154.114.52.*` IP address allocated and click on the *Associate* button.
+   1. Select the `154.114.52.*` IP address allocated and click on the *Associate* button.
    <p align="center"><img alt="OpenStack Running State." src="./resources/openstack_added_floating_ip.png" width=900 /></p>
 
 ## Troubleshooting
@@ -449,35 +449,35 @@ If your workstation or laptop is running a Linux-based or macOS operating system
 > In an Alma Linux cloud image, the default login account is **alma**.
 
 ```bash
-   ssh -i ~/.ssh/id_ed25519 alma@154.114.57.<YOUR Head Node IP>
+   ssh -i ~/.ssh/id_ed25519 alma@154.114.52.<YOUR Head Node IP>
 ```
 
 > [!NOTE]
 > In an Arch Linux cloud image, the default login account is **arch**.
 
 ```bash
-   ssh -i ~/.ssh/id_ed25519 arch@154.114.57.<YOUR Head Node IP>
+   ssh -i ~/.ssh/id_ed25519 arch@154.114.52.<YOUR Head Node IP>
 ```
 
 > [!NOTE]
 > In a CentOS Linux cloud image, the default login account is **centos**.
 
 ```bash
-   ssh -i ~/.ssh/id_ed25519 centos@154.114.57.<YOUR Head Node IP>
+   ssh -i ~/.ssh/id_ed25519 centos@154.114.52.<YOUR Head Node IP>
 ```
 
 > [!NOTE]
 > In a Rocky Linux cloud image, the default login account is **rocky**.
 
 ```bash
-   ssh -i ~/.ssh/id_ed25519 rocky@154.114.57.<YOUR Head Node IP>
+   ssh -i ~/.ssh/id_ed25519 rocky@154.114.52.<YOUR Head Node IP>
 ```
 
 > [!NOTE]
 > In an Ubuntu Linux cloud image, the default login account is **ubuntu**.
 
 ```bash
-   ssh -i ~/.ssh/id_ed25519 ubuntu@154.114.57.<YOUR Head Node IP>
+   ssh -i ~/.ssh/id_ed25519 ubuntu@154.114.52.<YOUR Head Node IP>
 ```
 
 > [!TIP]
