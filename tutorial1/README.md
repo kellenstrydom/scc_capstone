@@ -37,6 +37,17 @@ This tutorial will conclude with you downloading, installing and running the Hig
         1. [Troubleshooting](#troubleshooting)
 
     1. [Launching Your First AWS EC2 Instance](#32-launching-your-first-aws-ec2-instance)
+        1. [Accessing the AWS Management Console](#321-accessing-the-aws-management-console)
+        1. [Creating a New EC2 Instance](#322-creating-a-new-ec2-instance)
+        1. [Selecting an AMI](#selecting-an-ami)
+        1. [Choosing an Instance Type](#choosing-an-instance-type)
+        1. [Creating or Using an SSH Key Pair](#323-creating-or-using-an-ssh-key-pair)
+        1. [Configuring Network Settings](#324-configuring-network-settings)
+        1. [Launching the Instance](#325-launching-the-instance)
+        1. [Allocating and Associating an Elastic IP](#326-allocating-and-associating-an-elastic-ip)
+        1. [Connecting to Your Instance via SSH](#327-connecting-to-your-instance-via-ssh)
+        1. [AWS Troubleshooting](#328-aws-troubleshooting)
+
     1. [Launching Your First Oracle Cloud Instance](#33-launching-your-first-oracle-cloud-instance)
 
 1. [Introduction to Basic Linux Administration](#introduction-to-basic-linux-administration)
