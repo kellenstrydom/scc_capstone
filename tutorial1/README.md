@@ -452,6 +452,276 @@ In order for you to be able to SSH into your newly created OpenStack instance, y
 If your VM is deleted then the floating IP associated with that deleted VM will stay in your project under `Networks -> Floating IPs` for future use. Should you accidentally associate your floating IP to one of your compute nodes, dissociate it as per the diagram below, so that it may be allocated to your head node. Selecting the floating IP and clicking `Release Floating IPs` will send the floating IP back to the pool and you can call a tutor to help you get back your IP.
   <p align="center"><img alt="OpenStack Instance flavor." src="./resources/openstack_troubleshooting_dissociate_float_ip.png" width=900 /></p>
 
+
+## 3.2 Launching Your First AWS EC2 Instance
+
+Amazon EC2 (Elastic Compute Cloud) allows you to create virtual machines on the AWS cloud.
+This section guides you through logging into AWS, launching an instance, configuring networking,
+assigning an Elastic IP, and connecting via SSH.
+
+---
+
+### 3.2.1 Accessing the AWS Management Console
+
+> **Prerequisite:**  
+> Most universities give SCC teams AWS access via student login.  
+> If your institution does not provide an account, you may use a Free Tier account.
+
+1. Open the AWS Console:
+
+https://console.aws.amazon.com/
+
+
+2. Sign in using:
+- Your student credentials **OR**
+- Your personal AWS account
+
+3. After logging in, search for **EC2** in the search bar.
+4. Open the **EC2 Dashboard**.
+
+---
+
+### 3.2.2 Creating a New EC2 Instance
+
+Once inside the EC2 Dashboard:
+
+1. Click **Instances** (left menu)
+2. Click **Launch Instance** to begin configuring your VM
+
+---
+
+#### Selecting an AMI
+
+An **AMI** (Amazon Machine Image) determines which operating system and base
+software your EC2 instance will run. On the **Quick Start** tab AWS shows a
+set of common images like this:
+
+| Quick Start option | OS family              | Typical usage / notes                                  |
+|--------------------|------------------------|--------------------------------------------------------|
+| Amazon Linux       | Linux (Amazon Linux)   | Optimised for AWS, good general-purpose server choice  |
+| Ubuntu             | Linux (Debian-based)   | Very popular, large community and package ecosystem    |
+| Red Hat            | Linux (RHEL)           | Enterprise-focused, often used in production systems   |
+| SUSE Linux         | Linux (SUSE)           | Enterprise and SAP workloads                           |
+| Debian             | Linux (Debian)         | Stable, community-driven server distribution           |
+| Windows            | Microsoft Windows      | Required if you need a Windows Server environment      |
+| macOS*             | Apple macOS            | Specialised use; requires dedicated Mac hardware       |
+
+> \* macOS instances are only available in certain regions and accounts.
+
+For this tutorial, you may select **any AMI that suits your project or
+institutional requirements**. In most SCC and teaching environments a
+Linux-based AMI (such as Amazon Linux, Ubuntu, Red Hat, SUSE or Debian) is
+preferred because it aligns with typical HPC and command-line workflows.
+If you are unsure, consult your team or course coordinator for a
+recommended choice.
+
+#### Selecting an Instance Type
+
+Instance types determine the CPU and RAM of your VM.
+
+AWS will show a list similar to this:
+
+| Instance type | vCPUs | Memory (GiB) | Free Tier Eligible | Notes |
+|---------------|-------|--------------|---------------------|--------|
+| **t3.micro**  | 2     | 1            |  Yes               | Good for testing |
+| **t3.small**  | 2     | 2            |  Yes               | More RAM |
+| **t3.medium** | 2     | 4            |  No                | Heavier workloads |
+
+Students may choose:
+
+- **any Free Tier instance**,  
+- or any instance their institution grants access to.
+
+There is **no fixed instance you must use** for this tutorial.
+
+---
+
+### 3.2.3 Creating or Using an SSH Key Pair
+
+To connect securely via SSH, AWS requires an SSH key pair.
+
+In the **Key pair (login)** section:
+
+#### Option A — Create a New Key Pair
+1. Click **Create new key pair**
+2. Name the key  
+3. Choose:
+   - **Key pair type:** RSA  
+   - **Format:** `.pem`
+4. Download the private key (`something.pem`)
+
+>  This file can never be downloaded again. Keep it safe.
+
+#### Option B — Use an Existing Key Pair
+If you already have a `.pem` key:
+- Choose **Existing key pair**
+- Select your key from the list
+
+#### Set Correct Permissions
+
+Before using the key, ensure the permissions are set correctly:
+
+```bash
+chmod 400 your-key.pem
+```
+---
+### 3.2.4 Configuring Network Settings
+
+In this section you will configure the networking rules that allow your AWS instance
+to receive external traffic (e.g., SSH connections).
+
+Under **Network settings**, ensure the following:
+
+1. **VPC:**  
+   Use the default VPC unless your institution has instructed otherwise.
+
+2. **Auto-assign Public IP:**  
+   Ensure this option is enabled so your instance is accessible from the internet.
+
+3. **Security Group Configuration:**  
+   Create a new security group or use an existing one.  
+   Make sure the following inbound rules are allowed:
+   
+| Type      | Protocol | Port | Source             | Description                             |
+|-----------|----------|------|--------------------|-----------------------------------------|
+| SSH       | TCP      | 22   | `<YOUR_IP/32>`     | Required to log in via SSH              |
+| ICMP      | ALL      | ALL  | `<YOUR_IP/32>`     | (Optional) Allows ping/troubleshooting  |
+
+> [!TIP]
+> Replace `<YOUR_IP/32>` with your own public IP address in CIDR notation,
+> for example `196.21.42.123/32`. You can find your public IP using
+> https://www.whatismyip.com or a similar site.
+
+> [!CAUTION]
+> For quick testing from **multiple locations or networks**, you *may* temporarily
+> use `0.0.0.0/0` as the source, but this is less secure because it allows SSH
+> from anywhere on the internet. For best practice, restrict SSH to your own IP
+> or to your university’s network range.
+
+---
+
+### 3.2.5 Launching the Instance
+
+After configuring the instance details, scroll to the bottom of the page and click:
+
+Launch Instance
+
+AWS will begin creating your virtual machine.  
+Once completed, you should see:
+
+- **Instance ID**
+- **Public IPv4 address**
+- **Instance state:** Running
+
+You can view these in the **Instances** page of the EC2 Dashboard.
+
+### 3.2.6 Allocating and Associating an Elastic IP
+
+AWS may change your public IP each time the instance stops/starts.  
+An **Elastic IP** ensures that your instance keeps the same IP address.
+
+Follow these steps:
+
+1. In the EC2 left-hand menu, open **Elastic IPs**
+2. Click **Allocate Elastic IP**
+3. Select **Allocate**
+4. After allocation, choose **Actions → Associate Elastic IP**
+5. Select:
+   - Your instance  
+   - The correct network interface  
+6. Click **Associate**
+
+Your instance now has a **persistent public IP**.
+
+---
+### 3.2.7 Connecting to Your Instance via SSH
+
+Use the following SSH command to connect to your instance:
+
+```bash
+ssh -i your-key.pem ubuntu@<YOUR-ELASTIC-IP>
+```
+Notes:
+
+Ensure your .pem file:
+
+Exists in your current directory
+
+Has correct permissions (chmod 400)
+
+Matches the key pair selected during creation
+
+---
+### 3.2.8 AWS Troubleshooting
+
+Common problems and quick checks:
+
+1. SSH: “Permission denied (publickey)”
+
+Make sure you are using the correct username for your AMI
+(for Ubuntu AMIs this is usually ubuntu).
+
+Confirm you are pointing to the correct key file and Elastic IP:
+
+```bash
+ssh -i your-key.pem ubuntu@<YOUR-ELASTIC-IP>
+```
+
+Check the key permissions (required by AWS):
+
+```bash
+chmod 400 your-key.pem
+```
+
+2. Connection timed out
+
+- If SSH hangs and eventually times out:
+
+- Check the EC2 console: instance must be Running.
+
+- Verify that your Security Group allows inbound TCP 22 from your IP
+ (for example YOUR_IP/32).
+
+- Make sure you are using the correct Elastic IP address.
+
+- Ensure your local network/firewall allows outbound SSH on port 22.
+
+3. “Unprotected private key file” warning
+
+- If SSH complains that your .pem file is too open:
+
+```bash
+chmod 400 *.pem
+```
+
+- Try connecting again after fixing the permissions.
+
+4. Still stuck?
+
+If you are still unable to connect:
+
+- Stop the instance and then start it again from the EC2 console.
+
+- Re-check that the correct key pair was selected when the instance was launched.
+
+- Carefully review your Security Group rules.
+
+- Compare your settings with a teammate’s working configuration or ask a tutor
+  to review your AWS setup.
+
+5. As a last resort: Recreate the instance
+
+If nothing else works:
+
+- Terminate the problematic EC2 instance.
+
+- Keep your existing Security Group and key pair.
+
+- Launch a new instance by following the steps in Section 3.2.
+
+- If you were using an Elastic IP, disassociate it from the old instance and
+  associate it with the new one instead of allocating a new Elastic IP.
+
 # Introduction to Basic Linux Administration
 
 If you've managed to successfully build and deploy your VM instance, and you managed to successfully associate and attach a floating IP bridged over your internal interface, you are finally ready to connect to your newly created instance.
