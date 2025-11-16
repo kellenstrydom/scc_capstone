@@ -17,31 +17,39 @@ This tutorial will conclude with you downloading, installing and running the Hig
 1. [Network Primer](#network-primer)
     1. [Basic Networking Example (WhatIsMyIp.com)](#basic-networking-example-whatismyipcom)
     1. [Terminal, Windows MobaXTerm and PowerShell Commands](#terminal-windows-mobaxterm-and-powershell-commands)
-1. [Launching your First Open Stack Virtual Machine Instance](#launching-your-first-open-stack-virtual-machine-instance)
-    1. [Accessing the NICIS Cloud](#accessing-the-nicis-cloud)
-    1. [Verify your Teams' Project Workspace and Available Resources](#verify-your-teams-project-workspace-and-available-resources)
-    1. [Generating SSH Keys](#generating-ssh-keys)
-    1. [Create a New Private Virtual Network](#create-a-new-private-virtual-network)
-    1. [Create a New Router](#create-a-new-router)
-    1. [Create a New Security Group](#create-a-new-security-group)
-    1. [Launch a New Instance](#launch-a-new-instance)
-    1. [Linux Flavors and Distributions](#linux-flavors-and-distributions)
-        1. [Summary of Linux Distributions](#summary-of-linux-distributions)
-    1. [OpenStack Instance Flavors](#openstack-instance-flavors)
-    1. [Networks, Ports, Services and Security Groups](#networks-ports-services-and-security-groups)
-    1. [Key Pair](#key-pair)
-    1. [Verify that your Instance was Successfully Deployed and Launched](#verify-that-your-instance-was-successfully-deployed-and-launched)
-    1. [Associating an Externally Accessible IP Address](#associating-an-externally-accessible-ip-address)
-    1. [Troubleshooting](#troubleshooting)
-1. [Launching Your First AWS EC2 Instance](#launching-your-first-aws-ec2-instance)
+
+1. [Launching your First Virtual Machine Instance](#launching-your-first-virtual-machine-instance)
+    1. [Launching your First OpenStack Virtual Machine Instance](#31-launching-your-first-openstack-virtual-machine-instance)
+        1. [Accessing the NICIS Cloud](#accessing-the-nicis-cloud)
+        1. [Verify your Teams' Project Workspace and Available Resources](#verify-your-teams-project-workspace-and-available-resources)
+        1. [Generating SSH Keys](#generating-ssh-keys)
+        1. [Create a New Private Virtual Network](#create-a-new-private-virtual-network)
+        1. [Create a New Router](#create-a-new-router)
+        1. [Create a New Security Group](#create-a-new-security-group)
+        1. [Launch a New Instance](#launch-a-new-instance)
+        1. [Linux Flavors and Distributions](#linux-flavors-and-distributions)
+            1. [Summary of Linux Distributions](#summary-of-linux-distributions)
+        1. [OpenStack Instance Flavors](#openstack-instance-flavors)
+        1. [Networks, Ports, Services and Security Groups](#networks-ports-services-and-security-groups)
+        1. [Key Pair](#key-pair)
+        1. [Verify that your Instance was Successfully Deployed and Launched](#verify-that-your-instance-was-successfully-deployed-and-launched)
+        1. [Associating an Externally Accessible IP Address](#associating-an-externally-accessible-ip-address)
+        1. [Troubleshooting](#troubleshooting)
+
+    1. [Launching Your First AWS EC2 Instance](#32-launching-your-first-aws-ec2-instance)
+    1. [Launching Your First Oracle Cloud Instance](#33-launching-your-first-oracle-cloud-instance)
+
 1. [Introduction to Basic Linux Administration](#introduction-to-basic-linux-administration)
     1. [Accessing your VM Using SSH vs the OpenStack Web Console (VNC)](#accessing-your-vm-using-ssh-vs-the-openstack-web-console-vnc)
     1. [Running Basic Linux Commands and Services](#running-basic-linux-commands-and-services)
+
 1. [Linux Binaries, Libraries and Package Management](#linux-binaries-libraries-and-package-management)
     1. [User Environment and the `PATH` Variable](#user-environment-and-the-path-variable)
+
 1. [Install, Compile and Run High Performance LinPACK (HPL) Benchmark](#install-compile-and-run-high-performance-linpack-hpl-benchmark)
 
 <!-- markdown-toc end -->
+
 
 # Checklist
 
