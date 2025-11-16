@@ -33,6 +33,7 @@ This tutorial will conclude with you downloading, installing and running the Hig
     1. [Verify that your Instance was Successfully Deployed and Launched](#verify-that-your-instance-was-successfully-deployed-and-launched)
     1. [Associating an Externally Accessible IP Address](#associating-an-externally-accessible-ip-address)
     1. [Troubleshooting](#troubleshooting)
+1. [3.2 Launching Your First AWS EC2 Instance](#launching-your-first-aws-ec2-instance)
 1. [Introduction to Basic Linux Administration](#introduction-to-basic-linux-administration)
     1. [Accessing your VM Using SSH vs the OpenStack Web Console (VNC)](#accessing-your-vm-using-ssh-vs-the-openstack-web-console-vnc)
     1. [Running Basic Linux Commands and Services](#running-basic-linux-commands-and-services)
