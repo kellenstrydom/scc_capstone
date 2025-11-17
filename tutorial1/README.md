@@ -629,7 +629,7 @@ Once completed, you should see:
 - **Public IPv4 address**
 - **Instance state:** Running
 
-<p align="center"><img alt="SignIn" src="./resources/RunningInstance.png" width=900 /></p>
+<p align="center"><img alt="SignIn" src="./resources/RunningInstance.png" width=1000 /></p>
 
 You can view these in the **Instances** page of the EC2 Dashboard.
 
@@ -667,13 +667,13 @@ ssh -i your-key.pem ubuntu@<YOUR-ELASTIC-IP>
 ```
 Notes:
 
-Ensure your .pem file:
+- Ensure your .pem file:
 
-Exists in your current directory
+- Exists in your current directory
 
-Has correct permissions (chmod 400)
+- Has correct permissions (chmod 400)
 
-Matches the key pair selected during creation
+- Matches the key pair selected during creation
 
 ---
 ### 3.2.8 AWS Troubleshooting
