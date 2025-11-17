@@ -476,19 +476,27 @@ https://console.aws.amazon.com/
 - Your student credentials **OR**
 - Your personal AWS account
 
+ <p align="center"><img alt="SignIn" src="./resources/SignIn.png" width=900 /></p>
+
+
 3. After logging in, search for **EC2** in the search bar.
+
 4. Open the **EC2 Dashboard**.
 
----
+ <p align="center"><img alt="SignIn" src="./resources/EC2Dashboard.png" width=900 /></p>
+
 
 ### 3.2.2 Creating a New EC2 Instance
 
 Once inside the EC2 Dashboard:
 
 1. Click **Instances** (left menu)
+
 2. Click **Launch Instance** to begin configuring your VM
 
----
+
+<p align="center"><img alt="SignIn" src="./resources/LaunchInstance.png" width=900 /></p>
+
 
 #### Selecting an AMI
 
@@ -521,6 +529,8 @@ Instance types determine the CPU and RAM of your VM.
 
 AWS will show a list similar to this:
 
+<p align="center"><img alt="SignIn" src="./resources/InstanceType.png" width=900 /></p>
+
 | Instance type | vCPUs | Memory (GiB) | Free Tier Eligible | Notes |
 |---------------|-------|--------------|---------------------|--------|
 | **t3.micro**  | 2     | 1            |  Yes               | Good for testing |
@@ -541,6 +551,10 @@ There is **no fixed instance you must use** for this tutorial.
 To connect securely via SSH, AWS requires an SSH key pair.
 
 In the **Key pair (login)** section:
+
+
+<p align="center"><img alt="SignIn" src="./resources/KeyPair.png" width=900 /></p>
+
 
 #### Option A — Create a New Key Pair
 1. Click **Create new key pair**
@@ -573,7 +587,7 @@ to receive external traffic (e.g., SSH connections).
 Under **Network settings**, ensure the following:
 
 1. **VPC:**  
-   Use the default VPC unless your institution has instructed otherwise.
+   Use the default VPC.
 
 2. **Auto-assign Public IP:**  
    Ensure this option is enabled so your instance is accessible from the internet.
@@ -606,6 +620,8 @@ After configuring the instance details, scroll to the bottom of the page and cli
 
 Launch Instance
 
+<p align="center"><img alt="SignIn" src="./resources/LaunchEC2.png" width=900 /></p>
+
 AWS will begin creating your virtual machine.  
 Once completed, you should see:
 
@@ -623,7 +639,13 @@ An **Elastic IP** ensures that your instance keeps the same IP address.
 Follow these steps:
 
 1. In the EC2 left-hand menu, open **Elastic IPs**
+
+<p align="center"><img alt="SignIn" src="./resources/ElasticIPs.png" width=400 /></p>
+
 2. Click **Allocate Elastic IP**
+
+<p align="center"><img alt="SignIn" src="./resources/AllocateElasticIP.png" width=900 /></p>
+
 3. Select **Allocate**
 4. After allocation, choose **Actions → Associate Elastic IP**
 5. Select:
