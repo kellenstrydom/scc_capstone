@@ -689,7 +689,7 @@ Because `aws-compute2` is a clone of `aws-compute1`, some identity settings need
 1. SSH into the new compute node:
    ```bash
    ssh ec2-user@<aws-compute2-private-ip>
-``
+
 1. Set a unique hostname:
 
    ```bash
