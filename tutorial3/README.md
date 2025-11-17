@@ -19,6 +19,8 @@ Student Cluster Competition - Tutorial 3
 1. [LinPACK Theoretical Peak Performance](#linpack-theoretical-peak-performance)
     1. [Top500 List](#top500-list)
 1. [Spinning Up a Second Compute Node Using a Snapshot](#spinning-up-a-second-compute-node-using-a-snapshot)
+    1. [Spinning Up a Second Compute Node Using a Snapshot on OpenStack](#spinning-up-a-second-compute-node-using-a-snapshot-on-openstack)
+    1. [Spinning Up a Second Compute Node Using a Snapshot with AWS](#spinning-up-a-second-compute-node-using-a-snapshot-with-aws)
     1. [Running HPL Across Multiple Nodes](#running-hpl-across-multiple-nodes)
 1. [Application Benchmark Profiling](#application-benchmark-profiling)
     1. [Hardware Topology](#hardware-topology)
@@ -615,6 +617,8 @@ The [TOP500 list](https://top500.org/lists/top500/2024/06/) is a project that ra
 
 # Spinning Up a Second Compute Node Using a Snapshot
 
+## Spinning Up a Second Compute Node Using a Snapshot on OpenStack
+
 At this point you are ready to run HPL on your cluster with two compute nodes. From your OpenStack workspace, navigate to `Compute` &rarr; `Instances` and create a snapshot from your compute node.
 
 Launch a new instance, as you did in [Tutorial 1](../tutorial1/README.md#launch-a-new-instance) and [Tutorial 2](../tutorial2/README.md#spinning-up-a-compute-node-on-sebowaopenstack) only this time you'll be using the snapshot that you have just created as boot source.
@@ -622,6 +626,101 @@ Launch a new instance, as you did in [Tutorial 1](../tutorial1/README.md#launch-
 <p align="center"><img alt="OpenStack create instance from Snapshot." src="./resources/openstack_instance_snapshot.png" width=900 /></p>
 
 Pay careful attention to the hostname, network and other configuration settings that may be specific to and may conflict with your initial node. Once your two compute nodes have been successfully deployed, are accessible from the head node and added to your MPI `hosts` file, you can continue with running HPL across multiple nodes.
+
+## Spinning Up a Second Compute Node Using a Snapshot with AWS
+
+On AWS this is achieved by creating an **Amazon Machine Image (AMI)** from your existing compute node and then launching a second compute node from that image. The AMI serves the same purpose as a snapshot in OpenStack: it captures the complete state of your configured node.
+
+You should already have:
+
+- A head node with NFS and passwordless SSH configured.
+- A first compute node, `aws-compute1`, on which HPL is installed and working.
+
+### Creating an AMI from your compute node
+
+1. Navigate to your AWS console → **EC2** → **Instances**.
+1. Select your compute node instance (for example `aws-compute1`)
+1. Click **Actions → Image and templates → Create image**.
+
+![Snapshot1](./resources/Snapshot1.png)
+   
+1. Fill in:
+   - **Image name:** `compute01-ami`
+   - **Description:** `Base compute node with MPI + HPL`
+   - Leave the default root volume configuration.
+   - Ensure **Reboot instance** is checked.
+1. Click **Create image**.
+
+AWS will now create:
+
+- An **AMI** called `compute01-ami`.
+- One or more **EBS snapshots** for the instance volumes.
+
+You can monitor the AMI state under **EC2 → AMIs**. Wait until the AMI status changes from `pending` to `available`.
+
+> [!NOTE]
+> If you attempt to launch a new instance before the AMI’s snapshots have completed you may see the error:
+> `Snapshot is in invalid state – pending`.  
+> Simply wait for the AMI to become `available` and then retry launching.
+
+### Launching the second compute node from the AMI
+
+Once `compute01-ami` is `available`:
+
+1. Go to **EC2 → AMIs** and select `compute01-ami`.
+1. Click **Launch instance**.
+1. Configure the instance:
+   - **Name:** `aws-compute2`
+   - **Application and OS Images (AMI):** `compute01-ami`
+   - **Instance type:** same as `aws-compute1`.
+   - **Key pair:** the same key you use for your head node and `aws-compute1`.
+   - **Network settings:**
+     - Same VPC as the head node.
+     - Same private subnet as `aws-compute1`.
+     - Same security group used by `aws-compute1` (must allow SSH within the cluster).
+   - (Optional) Assign a static private IP, e.g. `10.0.0.12`.
+
+1. Click **Launch instance** and wait until the instance state is `running`.
+
+### Configuring hostnames and networking on `aws-compute2`
+
+Because `aws-compute2` is a clone of `aws-compute1`, some identity settings need to be corrected.
+
+1. SSH into the new compute node:
+   ```bash
+   ssh ec2-user@<aws-compute2-private-ip>
+``
+1. Set a unique hostname:
+
+   ```bash
+   sudo hostnamectl set-hostname aws-compute2
+   ```
+2. Update `/etc/hosts` on **all nodes** (head node, `aws-compute1`, `aws-compute2`) so they can resolve each other by name. For example:
+
+   ```text
+   10.0.0.10   aws-compute1
+   10.0.0.12   aws-compute2
+   ```
+
+   Replace the IP addresses with the actual private IPs from your AWS subnet.
+3. Verify that the NFS `/home` directory is mounted on `aws-compute2`:
+
+   ```bash
+   sudo mount -a
+   df -h | grep home
+   ```
+
+   You should see `/home` mounted from your head node.
+4. From the head node, test passwordless SSH:
+
+   ```bash
+   ssh aws-compute1 hostname
+   ssh aws-compute2 hostname
+   ```
+
+Both commands should log in without prompting for a password and print the correct hostname.
+
+Once your two compute nodes have been successfully deployed, are accessible from the head node, and share the same NFS-mounted `/home` directory, you can continue with running HPL across multiple nodes.
 
 ## Running HPL Across Multiple Nodes
 
