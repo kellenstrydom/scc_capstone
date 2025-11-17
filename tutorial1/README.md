@@ -629,7 +629,7 @@ Once completed, you should see:
 - **Public IPv4 address**
 - **Instance state:** Running
 
-<p align="center"><img alt="SignIn" src="./resources/RunningInstance.png" width=500 /></p>
+<p align="center"><img alt="SignIn" src="./resources/RunningInstance.png" width=900 /></p>
 
 You can view these in the **Instances** page of the EC2 Dashboard.
 
