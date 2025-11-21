@@ -14,10 +14,15 @@
 1. [Configuring and Connecting to your Remote JupyterLab Server](#configuring-and-connecting-to-your-remote-jupyterlab-server)
     1. [Visualize Your HPL Benchmark Results](#visualize-your-hpl-benchmark-results)
     1. [Visualize Your Qiskit Results](#visualize-your-qiskit-results)
-1. [Automating the Deployment of your OpenStack Instances Using Terraform](#automating-the-deployment-of-your-openstack-instances-using-terraform)
-    1. [Install and Initialize Terraform](#install-and-initialize-terraform)
-    1. [Generate `clouds.yml` and `main.tf` Files](#generate-cloudsyml-and-maintf-files)
-    1. [Generate, Deploy and Apply Terraform Plan](#generate-deploy-and-apply-terraform-plan)
+1. [Automating the Deployment of Instances Using Terraform](#automating-the-deployment-of-instances-using-terraform)
+    1. [Automating the Deployment of your OpenStack Instances Using Terraform](#automating-the-deployment-of-your-openstack-instances-using-terraform)
+        1. [Install and Initialize Terraform](#install-and-initialize-terraform)
+        1. [Generate `clouds.yml` and `main.tf` Files](#generate-cloudsyml-and-maintf-files)
+        1. [Generate, Deploy and Apply Terraform Plan](#generate-deploy-and-apply-terraform-plan)
+    1. [Automating the Deployment of your AWS Instances Using Terraform](#automating-the-deployment-of-your-aws-instances-using-terraform)
+        1. [Install and Initialize Terraform](#install-and-initialise-terraform-1)
+        1. [Create `providers.tf` and `main.tf` Files](#create-providerstf-and-maintf-files)
+        1. [Generate, Deploy and Apply Terraform Plan](#generate-deploy-and-apply-terraform-plan-1)
 1. [Continuous Integration Using CircleCI](#continuous-integration-using-circleci)
     1. [Prepare GitHub Repository](#prepare-github-repository)
     1. [Reuse `providers.tf` and `main.tf` Terraform Configurations](#reuse-providerstf-and-maintf-terraform-configurations)
@@ -771,8 +776,8 @@ You are now going to extend your `qv_experiment` and plot your results, by drawi
    ```bash
    python qv_experiment.py
    ```
-
-# Automating the Deployment of your OpenStack Instances Using Terraform
+#  Automating the Deployment of Instances Using Terraform
+## Automating the Deployment of your OpenStack Instances Using Terraform
 
 Terraform is a piece of software that allows one to write out their cloud infrastructure and deployments as code, [IaC](https://en.wikipedia.org/wiki/Infrastructure_as_code). This allows the deployments of your cloud virtual machine instances to be shared, iterated, automated as needed and for software development practices to be applied to your infrastructure.
 
@@ -781,7 +786,7 @@ In this section of the tutorial, you will be deploying an additional compute nod
 > [!CAUTION]
 > In the following section, **you must request additional resources from the instructors**. This additional node will be experimental for testing your changes to your cluster before committing them to your active compute nodes. You will be deleting and reinitializing this instance often. Make sure you understand how to [Delete Instance](../tutorial1/README.md#troubleshooting).
 
-## Install and Initialize Terraform
+### Install and Initialize Terraform
 
 You will now prepare, install and initialize Terraform on your head node. You will define and configure a `providers.tf` file, to configure OpenStack instances (as Sebowa is an OpenStack based cloud).
 
@@ -847,7 +852,7 @@ You will now prepare, install and initialize Terraform on your head node. You wi
    terraform init
    ```
 
-## Generate `clouds.yml` and `main.tf` Files
+### Generate `clouds.yml` and `main.tf` Files
 
 Generate and configure the `cloud.yml` file that will authenticate you against your Sebowa OpenStack workspace, and the `main.tf`files that will define how your infrastructure should be provisioned.
 
@@ -904,7 +909,7 @@ Generate and configure the `cloud.yml` file that will authenticate you against y
 > [!NOTE]
 > You must specify your own variables for `name`, `image_id`, `flavor_id`, `key_pair` and `network.name`.
 
-## Generate, Deploy and Apply Terraform Plan
+### Generate, Deploy and Apply Terraform Plan
 
 1. Generate and Deploy Terraform Plan
    Create a Terraform plan based on the current configuration. This plan will be used to implement changes to your Sebowa OpenStack cloud workspace, and can be reviewed before applying those changes.
@@ -923,6 +928,189 @@ Generate and configure the `cloud.yml` file that will authenticate you against y
 
 > [!TIP]
 > To avoid losing your team's progress, it would be a good idea to create a GitHub repo in order for you to commit and push your various scripts and configuration files.
+
+## Automating the Deployment of your AWS Instances Using Terraform
+
+Terraform is an open-source tool that allows you to define and manage your cloud infrastructure as code (IaC).  
+Using Terraform, you can reproducibly deploy and configure cloud resources such as compute nodes on AWS with minimal manual setup.
+
+In this section, you will deploy an **additional compute node** on **AWS** using Terraform.
+
+>  **Caution:**  
+> The additional compute node created in this section should be treated as **experimental** for testing purposes.  
+> It is intended for trial deployments before applying changes to your production cluster.  
+> You may need to delete and reinitialize this instance frequently.
+---
+
+### Install and Initialize Terraform
+
+You will first install and initialize Terraform on your **head node** or **local workstation**.
+
+#### APT (Ubuntu / Debian)
+
+```bash
+# Update package repository
+sudo apt-get update
+sudo apt-get install -y gnupg software-properties-common
+
+# Add HashiCorp GPG Keys
+wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+
+# Add the official HashiCorp Linux repository
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+# Install Terraform
+sudo apt-get update && sudo apt-get install -y terraform
+```
+
+Pacman (Arch)
+```bash
+sudo pacman -S terraform
+```
+
+After installation, verify that Terraform is available:
+
+``` bash
+terraform -v
+```
+
+onfigure AWS Credentials
+
+Terraform uses your AWS CLI credentials to authenticate with the cloud provider.
+On your head node, configure your AWS CLI profile:
+
+aws configure
+
+
+You will be prompted for:
+
+- AWS Access Key ID
+
+- AWS Secret Access Key
+
+- Default region name (e.g., af-south-1)
+
+- Default output format (e.g., json)
+
+This creates two configuration files automatically:
+
+```bash
+~/.aws/credentials
+
+~/.aws/config
+```
+
+Important:
+Never commit your AWS credentials to GitHub.
+These should remain only in your ~/.aws/credentials file or be set as environment variables.
+
+### Create providers.tf and main.tf Files
+
+Now, set up your Terraform project files.
+
+Step 1: Create the working directory
+
+```bash
+mkdir terraform
+cd terraform
+```
+
+Step 2: Create the Provider Configuration (providers.tf)
+
+This file tells Terraform which cloud provider to use.
+
+```bash
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "af-south-1"
+}
+```
+
+Step 3: Create the Instance Definition (main.tf)
+
+Define your EC2 compute node and its properties.
+
+```bash
+resource "aws_instance" "terraform_demo_instance" {
+  ami           = "<YOUR_AMI_ID>"
+  instance_type = "t3.medium"
+  key_name      = "<YOUR_KEY_PAIR_NAME>"
+  subnet_id     = "<YOUR_SUBNET_ID>"
+  vpc_security_group_ids = ["<YOUR_SECURITY_GROUP_ID>"]
+
+  tags = {
+    Name = "scc24-aws-cn-experimental"
+  }
+}
+```
+
+Notes:
+
+Replace the placeholders (<YOUR_AMI_ID>, <YOUR_SUBNET_ID>, etc.) with your actual AWS settings.
+
+Use a Linux AMI compatible with your setup (e.g., Ubuntu, Rocky, or AlmaLinux).
+
+Ensure the key pair and security group already exist.
+
+### Generate, Deploy and Apply Terraform Plan
+
+Terraform will now prepare and apply your infrastructure plan.
+
+Step 1: Initialise Terraform
+
+```bash
+terraform init
+```
+
+This downloads provider plugins and sets up your workspace.
+
+Step 2: Generate a Terraform Plan
+```bash
+terraform plan -out ~/terraform/aws-plan
+```
+
+This command shows what Terraform will create or modify in AWS.
+Review the proposed changes carefully before proceeding.
+
+Step 3: Apply the Terraform Plan
+
+```bash
+
+terraform apply ~/terraform/aws-plan
+```
+
+Terraform will now deploy the defined EC2 compute node in your AWS environment.
+
+Verify New Instance in AWS
+
+Once the deployment completes, confirm that your instance is active:
+
+- Open the AWS Management Console.
+
+- Navigate to EC2 → Instances.
+
+- Verify the instance named scc24-aws-cn-experimental (or your chosen name).
+
+- Once running, connect to it via SSH using your AWS key pair.
+
+```bash
+ssh -i ~/.ssh/<your-key.pem> ec2-user@<instance-public-ip>
+```
+
+Tip:
+To avoid incurring costs, remember to terminate test instances when not in use:
+
+```bash
+terraform destroy
+```
 
 # Continuous Integration Using CircleCI
 
