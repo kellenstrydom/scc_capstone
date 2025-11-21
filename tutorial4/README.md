@@ -974,13 +974,14 @@ After installation, verify that Terraform is available:
 terraform -v
 ```
 
-onfigure AWS Credentials
+Configure AWS Credentials: 
 
 Terraform uses your AWS CLI credentials to authenticate with the cloud provider.
 On your head node, configure your AWS CLI profile:
 
+```bash
 aws configure
-
+```
 
 You will be prompted for:
 
@@ -1000,7 +1001,7 @@ This creates two configuration files automatically:
 ~/.aws/config
 ```
 
-Important:
+> Important:
 Never commit your AWS credentials to GitHub.
 These should remain only in your ~/.aws/credentials file or be set as environment variables.
 
@@ -1052,13 +1053,10 @@ resource "aws_instance" "terraform_demo_instance" {
 }
 ```
 
-Notes:
-
-Replace the placeholders (<YOUR_AMI_ID>, <YOUR_SUBNET_ID>, etc.) with your actual AWS settings.
-
-Use a Linux AMI compatible with your setup (e.g., Ubuntu, Rocky, or AlmaLinux).
-
-Ensure the key pair and security group already exist.
+> Notes:
+> Replace the placeholders (<YOUR_AMI_ID>, <YOUR_SUBNET_ID>, etc.) with your actual AWS settings.
+> Use a Linux AMI compatible with your setup (e.g., Ubuntu, Rocky, or AlmaLinux).
+> Ensure the key pair and security group already exist.
 
 ### Generate, Deploy and Apply Terraform Plan
 
