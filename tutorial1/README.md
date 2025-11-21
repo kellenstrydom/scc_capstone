@@ -47,6 +47,17 @@ This tutorial will conclude with you downloading, installing and running the Hig
         1. [Allocating and Associating an Elastic IP](#326-allocating-and-associating-an-elastic-ip)
         1. [Connecting to Your Instance via SSH](#327-connecting-to-your-instance-via-ssh)
         1. [AWS Troubleshooting](#328-aws-troubleshooting)
+      
+    1. [Launching Your First OCI Instance](#33-launching-your-first-oci-instance)
+        1. [Creating an Account and Logging In](#331-creating-an-account-and-logging-in)
+        1. [Setting Up the Networking](#332-setting-up-the-networking)
+        1. [Creating a Subnet](#333-creating-a-subnet)
+        1. [Creating an Instance](#334-creating-an-instance)
+        1. [Choosing an Image and Shape](#choosing-an-image-and-shape)
+        1. [Configuring Networking](#configuring-networking)
+        1. [SSH Keys](#ssh-keys)
+        1. [Launching and Connecting](#335-launching-and-connecting)
+        1. [OCI Troubleshooting](#336-oci-troubleshooting)
 
     1. [Launching Your First Oracle Cloud Instance](#33-launching-your-first-oracle-cloud-instance)
 
@@ -745,6 +756,192 @@ If nothing else works:
 
 - If you were using an Elastic IP, disassociate it from the old instance and
   associate it with the new one instead of allocating a new Elastic IP.
+
+## 3.3 Launching Your First OCI Instance
+
+Oracle Cloud Infrastructure (OCI) allows you to create virtual machines (Compute Instances) in the cloud. This section guides you through creating an account, setting up a Virtual Cloud Network (VCN), and launching an instance within the Always Free tier.
+
+---
+
+### 3.3.1 Creating an Account and Logging In
+
+> **Prerequisite:**
+> You will need a valid credit/debit card for identity verification.
+> A small amount will be charged and immediately refunded to verify the card.
+> If you are a student, select student options where available during signup.
+
+1. Go to the Oracle Cloud Free Tier page:
+
+https://www.oracle.com/cloud/free/
+
+2. Click the **Start for free** button.
+
+3. Follow the on-screen instructions to create your account.
+
+4. **Two-Factor Authentication (2FA):**
+   Oracle uses the Oracle Mobile Authenticator app for security. You will be prompted to install this on your mobile device during the signup process.
+
+5. Once verified and logged in, you will see the **OCI Console Dashboard**:
+
+<p align="center"><img alt="OCI Dashboard" src="./resources/OCIDashboard.png" width=900 /></p>
+
+---
+
+### 3.3.2 Setting Up the Networking
+
+Before launching a computer, you must create a network for it to live in.
+
+1. Click the **Navigation Menu** (hamburger icon) in the top left corner.
+
+2. Navigate to **Networking** → **Virtual Cloud Networks**.
+
+3. Click **Create VCN**.
+
+4. Configure the VCN:
+   - **Name:** Give your VCN a recognizable name (e.g., `My-Project-VCN`).
+   - **IPv4 CIDR Block:** Enter a valid /16 value (e.g., `10.0.0.0/16`).
+
+<p align="center"><img alt="VCN Setup" src="./resources/VCNSetup.png" width=900 /></p>
+
+5. **IPv6 Configuration:**
+   Toggle **Assign an Oracle allocated IPv6 /56 prefix** to **ON**.
+
+<p align="center"><img alt="IPv6 Toggle" src="./resources/IPv6Toggle.png" width=900 /></p>
+
+6. Click **Create VCN**.
+
+### 3.3.3 Creating a Subnet
+
+1. Click on the **Name** of the VCN you just created to enter its details page.
+
+2. Go to the **Subnets** tab (usually selected by default).
+
+3. Click the **Create Subnet** button.
+
+4. Configure the Subnet:
+   - **Name:** e.g., `Public-Subnet-A`.
+   - **IPv4 CIDR Block:** Give it a valid range inside your VCN (e.g., `10.0.1.0/24`).
+   - **Subnet Access:** Ensure **Public Subnet** is selected.
+
+<p align="center"><img alt="Subnet Access" src="./resources/SubnetAccess.png" width=900 /></p>
+
+5. Click **Create Subnet**.
+
+---
+
+### 3.3.4 Creating an Instance
+
+Now that the network is ready, you can create the virtual machine.
+
+1. Navigate to **Compute** → **Instances**.
+
+2. Click **Create instance**.
+
+3. **Naming:** Give your instance a name (e.g., `Web-Server-01`).
+
+#### Choosing an Image and Shape
+
+**Image:** This is the Operating System. Click "Change Image" to see options.
+
+| Image Option | OS Family | Default Username | Notes |
+| :--- | :--- | :--- | :--- |
+| **Oracle Linux** | Linux (RPM-based) | `opc` | Default choice. Optimized for OCI. |
+| **Ubuntu** | Linux (Debian-based) | `ubuntu` | Very popular, easy for beginners. |
+| **CentOS** | Linux (RPM-based) | `opc` | Community-driven enterprise Linux. |
+| **Windows** | Windows Server | `opc` | **Not Free Tier eligible** in most cases. |
+
+**Shape:** This is the hardware (CPU/RAM). For the **Always Free** tier, select one of the following:
+
+| Shape | Processor | Specs | Limits |
+| :--- | :--- | :--- | :--- |
+| **VM.Standard.E2.1.Micro** | AMD | 1 OCPU, 1GB RAM | Up to 2 instances allowed. |
+| **VM.Standard.A1.Flex** | Ampere (ARM) | Up to 4 OCPUs, 24GB RAM | **Subject to region availability.** High performance. |
+
+#### Configuring Networking
+
+Scroll down to the **Networking** section.
+
+1. **Primary Network:** Select the VCN you created earlier.
+2. **Subnet:** Select the Public Subnet you created earlier.
+3. **Public IP:**
+   - Select **"Automatically assign private IPv4 address"**.
+   - Toggle **"Assign a public IPv4 address"** to **ON**.
+
+<p align="center"><img alt="Assign Public IP" src="./resources/AssignPublicIP.png" width=900 /></p>
+
+#### SSH Keys
+
+Scroll to the **Add SSH keys** section.
+
+1. Select **Generate a key pair for me** (easiest) or **Upload public key files** (if you have one).
+2. **Download the Private Key** and save it securely.
+
+> [!CAUTION]
+> You must download the private key (`.key`) now. You cannot download it after the instance is created.
+
+<p align="center"><img alt="SSH Keys" src="./resources/SSHKeys.png" width=900 /></p>
+
+3. Click **Create** at the bottom of the page.
+
+---
+
+### 3.3.5 Launching and Connecting
+
+#### Launching
+The instance will immediately begin provisioning.
+If the status does not change to **Running** automatically:
+- Click the **3 dots** on the far right of the instance row.
+- Select **Start**.
+
+<p align="center"><img alt="Example instance running" src="./resources/RunningNode.png" width=900 /></p>
+
+#### Connecting via SSH
+
+Once the instance is **Running**, note down the **Public IP Address** from the instance dashboard.
+
+Open your terminal and run:
+
+```bash
+ssh -i path/to/your-key.key <username>@<PUBLIC-IP>
+```
+
+**Note on Usernames:**
+- If you chose **Oracle Linux**, the username is `opc`.
+- If you chose **Ubuntu**, the username is `ubuntu`.
+
+Example:
+```bash
+ssh -i my-oci-key.key ubuntu@123.45.67.89
+```
+
+---
+
+### 3.3.6 OCI Troubleshooting
+
+Common issues when setting up Oracle Cloud instances:
+
+1. **SSH: "Permission denied (publickey)"**
+
+   - **Check the Username:** Ensure you are using the correct user for your OS image (`opc` for Oracle Linux/CentOS, `ubuntu` for Ubuntu).
+   - **Check Key Permissions:** Your private key file must not be open to others. Run:
+     ```bash
+     chmod 400 your-key.key
+     ```
+   - **Check the Key File:** Ensure you are using the `.key` file you downloaded during creation, not a different key.
+
+2. **Connection Timed Out**
+
+   - **Check Security Lists (Firewall):** Go to your **VCN** → **Security Lists**. Ensure there is an **Ingress Rule** allowing traffic on **Port 22** (SSH) from Source `0.0.0.0/0` (or your specific IP).
+   - **Check Public IP:** Did you toggle "Assign public IPv4 address" to ON during creation? If not, your instance is isolated. You will need to terminate it and create a new one with the setting enabled.
+
+3. **"Out of Capacity" Error**
+
+   - If you cannot create an **Ampere A1 Flex** instance, the region may be out of free ARM capacity.
+   - **Solution:** Try creating a **VM.Standard.E2.1.Micro** (AMD) instance instead, as these are more commonly available.
+
+4. **Instance Stuck in "Provisioning"**
+
+   - Sometimes OCI takes a few minutes. If it takes longer than 10 minutes, Terminate the instance and try creating it again.
 
 # Introduction to Basic Linux Administration
 
