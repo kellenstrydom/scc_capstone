@@ -801,12 +801,12 @@ Before launching a computer, you must create a network for it to live in.
    - **Name:** Give your VCN a recognizable name (e.g., `My-Project-VCN`).
    - **IPv4 CIDR Block:** Enter a valid /16 value (e.g., `10.0.0.0/16`).
 
-<p align="center"><img alt="VCN Setup" src="./resources/VCNSetup.png" width=900 /></p>
+<p align="center"><img alt="VCN Setup" src="./resources/VCNSetupHD.png" width=900 /></p>
 
 5. **IPv6 Configuration:**
    Toggle **Assign an Oracle allocated IPv6 /56 prefix** to **ON**.
 
-<p align="center"><img alt="IPv6 Toggle" src="./resources/IPv6Toggle.png" width=900 /></p>
+<p align="center"><img alt="IPv6 Toggle" src="./resources/IPv6ToggleHD.png" width=900 /></p>
 
 6. Click **Create VCN**.
 
@@ -823,7 +823,7 @@ Before launching a computer, you must create a network for it to live in.
    - **IPv4 CIDR Block:** Give it a valid range inside your VCN (e.g., `10.0.1.0/24`).
    - **Subnet Access:** Ensure **Public Subnet** is selected.
 
-<p align="center"><img alt="Subnet Access" src="./resources/SubnetAccess.png" width=900 /></p>
+<p align="center"><img alt="Subnet Access" src="./resources/SubnetAccessHD.png" width=900 /></p>
 
 5. Click **Create Subnet**.
 
@@ -867,7 +867,7 @@ Scroll down to the **Networking** section.
    - Select **"Automatically assign private IPv4 address"**.
    - Toggle **"Assign a public IPv4 address"** to **ON**.
 
-<p align="center"><img alt="Assign Public IP" src="./resources/AssignPublicIP.png" width=900 /></p>
+<p align="center"><img alt="Assign Public IP" src="./resources/AssignPublicIPHD.png" width=900 /></p>
 
 #### SSH Keys
 
